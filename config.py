@@ -1,243 +1,399 @@
 """
-Configuration constants for Opponent Analysis App.
+Competition configuration and Opta qualifier ID mapping.
+Config-driven: add a new league by adding a dict to COMPETITIONS.
 """
 
-# ─── Formation Code Mapping (Opta ID → human-readable) ────────────────────────
-FORMATION_MAP = {
-    2: "4-4-2",
-    3: "4-1-2-1-2",
-    4: "4-3-3",
-    5: "4-5-1",
-    6: "4-4-1-1",
-    7: "4-1-4-1",
-    8: "4-2-3-1",
-    10: "5-3-2",
-    11: "5-4-1",
-    12: "3-5-2",
-    13: "3-4-3",
-    15: "4-2-2-2",
-    16: "3-5-1-1",
-    17: "3-4-2-1",
-    18: "3-4-1-2",
-    19: "3-1-4-2",
-    21: "4-1-3-2",
-    23: "4-3-1-2",
+# ═══════════════════════════════════════════════════════════════════════════════
+# COMPETITIONS — add new leagues here
+# ═══════════════════════════════════════════════════════════════════════════════
+
+COMPETITIONS = {
+    "france_ligue1": {
+        "label": "France Ligue 1",
+        "scoresway_slug": "ligue-1",
+        "country": "France",
+        "opta_competition_id": "dm5ka0os1e3dxcp3vh05kmp33",
+        "competition_name": "Ligue 1",
+        "competition_known_name": "French Ligue 1",
+        "competition_code": "LI1",
+        "seasons": {
+            "2025-2026": {
+                # Full results page URL (contains all completed matchweeks)
+                "scoresway_results_url": "https://www.scoresway.com/en_GB/soccer/ligue-1-2025-2026/dbxs75cag7zyip5re0ppsanmc/results",
+                # Base URL for constructing match/view links
+                "scoresway_base_url": "https://www.scoresway.com/en_GB/soccer/ligue-1-2025-2026/dbxs75cag7zyip5re0ppsanmc",
+                "data_folder": "France_League_1_25-26",
+                "total_weeks": 38,
+            },
+            "2024-2025": {
+                # NOTE: Update the hash below from the actual Scoresway URL for this season
+                # Visit the season results page and copy the hash from the URL
+                "scoresway_results_url": "https://www.scoresway.com/en_GB/soccer/ligue-1-2024-2025/1jt5mxgn4q5r6mknmlqv514vs/results",
+                "scoresway_base_url": "https://www.scoresway.com/en_GB/soccer/ligue-1-2024-2025/1jt5mxgn4q5r6mknmlqv514vs",
+                "data_folder": "France_League_1_24-25",
+                "total_weeks": 34,
+            },
+        },
+    },
+    # "turkey_superlig": {
+    #     "label": "Turkey Süper Lig",
+    #     ...
+    # },
 }
 
-# ─── Position Groupings ───────────────────────────────────────────────────────
-POSITION_GROUPS = {
-    "GK": ["GK"],
-    "CB": ["CB"],
-    "FB/WB": ["RB", "LB", "RWB", "LWB"],
-    "Pivot/DM": ["CDM", "DM"],
-    "Interior/CM": ["MC", "CM"],
-    "AM/10": ["CAM", "AM"],
-    "Winger": ["RW", "LW", "RM", "LM"],
-    "Striker": ["CF", "ST", "SS"],
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# OPTA EVENT TYPE MAPPING — typeId → event name
+# ═══════════════════════════════════════════════════════════════════════════════
+
+EVENT_TYPE_MAP = {
+    1: "Pass",
+    2: "Offside Pass",
+    3: "Take On",
+    4: "Foul",
+    5: "Out",
+    6: "Corner Awarded",
+    7: "Tackle",
+    8: "Interception",
+    9: "Turnover",
+    10: "Save",
+    11: "Claim",
+    12: "Clearance",
+    13: "Miss",
+    14: "Post",
+    15: "Saved Shot",
+    16: "Goal",
+    17: "Card",
+    18: "Player Off",
+    19: "Player on",
+    20: "Player retired",
+    21: "Player returns",
+    22: "Player becomes goalkeeper",
+    23: "Goalkeeper becomes player",
+    24: "Condition change",
+    25: "Official change",
+    27: "Start delay",
+    28: "End delay",
+    30: "End",
+    32: "Start",
+    34: "Team setp up",
+    35: "Player changed position",
+    36: "Player changed jersey",
+    37: "Collection End",
+    38: "Temp_Goal",
+    39: "Temp_Save",
+    40: "Formation change",
+    41: "Punch",
+    42: "Good skill",
+    43: "Deleted event",
+    44: "Aerial",
+    45: "Challenge",
+    49: "Ball recovery",
+    50: "Dispossessed",
+    51: "Error",
+    52: "Keeper pick-up",
+    53: "Cross not claimed",
+    54: "Smother",
+    55: "Offside provoked",
+    56: "Shield ball opp",
+    57: "Foul throw-in",
+    58: "Penalty faced",
+    59: "Keeper sweeper",
+    60: "Chance missed",
+    61: "Ball touch",
+    63: "Temp_Shot",
+    64: "Resume",
+    65: "Contentious referee decision",
+    67: "50/50",
+    68: "Referee Drop Ball",
+    69: "Failed to block",
+    70: "Injury Time Announcement",
+    71: "Coach setup",
+    72: "Caught offside",
+    73: "Other ball contact",
+    74: "Blocked Pass",
+    75: "Delayed start",
+    76: "Tackle",
+    77: "Attendance",
+    78: "Coverage check",
+    79: "Shield ball",
+    80: "Referee stop play",
+    83: "Unknown",
+    84: "Unknown",
 }
 
-POSITION_GROUP_ORDER = ["GK", "CB", "FB/WB", "Pivot/DM", "Interior/CM", "AM/10", "Winger", "Striker"]
 
-# ─── Radar KPIs per Position Group ─────────────────────────────────────────────
-# Each list defines which stats appear on that group's radar
-RADAR_KPIS = {
-    "GK": [
-        ("pass_accuracy", "Pass Accuracy %"),
-        ("short_dist_pct", "Short Distribution %"),
-        ("long_dist_pct", "Long Distribution %"),
-        ("passes_pm", "Passes / Match"),
-        ("claims_pm", "Claims / Match"),
-        ("saves_pm", "Saves / Match"),
-    ],
-    "CB": [
-        ("pass_accuracy", "Pass Accuracy %"),
-        ("progressive_passes_pm", "Progressive Passes / M"),
-        ("tackles_pm", "Tackles / M"),
-        ("interceptions_pm", "Interceptions / M"),
-        ("aerials_won_pct", "Aerial Win %"),
-        ("recoveries_pm", "Recoveries / M"),
-        ("clearances_pm", "Clearances / M"),
-        ("long_ball_pm", "Long Balls / M"),
-    ],
-    "FB/WB": [
-        ("pass_accuracy", "Pass Accuracy %"),
-        ("progressive_passes_pm", "Progressive Passes / M"),
-        ("crosses_pm", "Crosses / M"),
-        ("tackles_pm", "Tackles / M"),
-        ("interceptions_pm", "Interceptions / M"),
-        ("take_on_success", "Take-On Success %"),
-        ("recoveries_pm", "Recoveries / M"),
-        ("avg_x", "Avg Height (x)"),
-    ],
-    "Pivot/DM": [
-        ("pass_accuracy", "Pass Accuracy %"),
-        ("progressive_passes_pm", "Progressive Passes / M"),
-        ("line_breaking_pm", "Line-Break Passes / M"),
-        ("tackles_pm", "Tackles / M"),
-        ("interceptions_pm", "Interceptions / M"),
-        ("recoveries_pm", "Recoveries / M"),
-        ("aerials_won_pct", "Aerial Win %"),
-        ("passes_pm", "Passes / M"),
-    ],
-    "Interior/CM": [
-        ("pass_accuracy", "Pass Accuracy %"),
-        ("progressive_passes_pm", "Progressive Passes / M"),
-        ("key_passes_pm", "Key Passes / M"),
-        ("shots_pm", "Shots / M"),
-        ("xg_pm", "xG / M"),
-        ("tackles_pm", "Tackles / M"),
-        ("take_on_success", "Take-On Success %"),
-        ("passes_pm", "Passes / M"),
-    ],
-    "AM/10": [
-        ("key_passes_pm", "Key Passes / M"),
-        ("progressive_passes_pm", "Progressive Passes / M"),
-        ("shots_pm", "Shots / M"),
-        ("xg_pm", "xG / M"),
-        ("goals_pm", "Goals / M"),
-        ("through_balls_pm", "Through Balls / M"),
-        ("take_on_success", "Take-On Success %"),
-        ("pass_accuracy", "Pass Accuracy %"),
-    ],
-    "Winger": [
-        ("shots_pm", "Shots / M"),
-        ("xg_pm", "xG / M"),
-        ("goals_pm", "Goals / M"),
-        ("crosses_pm", "Crosses / M"),
-        ("key_passes_pm", "Key Passes / M"),
-        ("take_on_success", "Take-On Success %"),
-        ("take_ons_pm", "Take-Ons / M"),
-        ("progressive_carries_pm", "Progressive Carries / M"),
-    ],
-    "Striker": [
-        ("shots_pm", "Shots / M"),
-        ("xg_pm", "xG / M"),
-        ("goals_pm", "Goals / M"),
-        ("aerials_won_pct", "Aerial Win %"),
-        ("key_passes_pm", "Key Passes / M"),
-        ("take_on_success", "Take-On Success %"),
-        ("xg_per_shot", "xG per Shot"),
-        ("shot_on_target_pct", "Shot on Target %"),
-    ],
+# ═══════════════════════════════════════════════════════════════════════════════
+# OPTA QUALIFIER ID → COLUMN NAME MAPPING
+# Maps from PerformFeeds qualifier IDs to the CSV column names.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+QUALIFIER_ID_MAP = {
+    1: "Long ball",
+    2: "Cross",
+    3: "Head pass",
+    4: "Through ball",
+    5: "Free kick taken",
+    6: "Corner taken",
+    7: "Players caught offside",
+    8: "Goal disallowed",
+    9: "Penalty",
+    10: "Hand",
+    11: "6-seconds violation",
+    12: "Dangerous play",
+    13: "Foul",
+    15: "Head",
+    17: "Right footed",
+    18: "Other body part",
+    20: "Involved",
+    22: "Regular play",
+    23: "Fast break",
+    24: "Set piece",
+    25: "From corner",
+    26: "Free kick",
+    28: "own goal",
+    29: "Assisted",
+    30: "Player Position",
+    31: "Zone",
+    44: "Jersey Number",
+    51: "Referee abuse",
+    52: "Argument",
+    53: "Fight",
+    54: "Time wasting",
+    55: "Excessive celebration",
+    56: "Crowd interaction",
+    57: "Other reason",
+    58: "Injury",
+    59: "Tactical",
+    72: "Left footed",
+    74: "Small box-centre",
+    75: "Box-centre",
+    76: "Out of box-centre",
+    77: "35+ centre",
+    82: "End cause",
+    83: "End type",
+    91: "Last line",
+    102: "Small box-right",
+    103: "Small box-left",
+    104: "Box-deep right",
+    105: "Box-right",
+    106: "Box-left",
+    107: "Box-deep left",
+    108: "Out of box-deep right",
+    109: "Out of box-right",
+    110: "Out of box-left",
+    111: "Out of box-deep left",
+    112: "35+ right",
+    113: "35+ left",
+    114: "Related event ID",
+    # Shot / goal mouth qualifiers
+    15: "Head",
+    72: "Left footed",
+    120: "Left",
+    121: "High",
+    122: "Right",
+    123: "Low Left",
+    124: "High Left",
+    125: "Low Centre",
+    126: "High Centre",
+    127: "Low Right",
+    128: "High Right",
+    129: "Blocked",
+    130: "Close Left",
+    131: "Close Right",
+    132: "Close High",
+    133: "Close Left and High",
+    134: "Close Right and High",
+    135: "High claim",
+    136: "1 on 1",
+    137: "Deflected save",
+    138: "Dive and deflect",
+    139: "Catch",
+    140: "Pass End X",
+    141: "Pass End Y",
+    142: "Dive and catch",
+    143: "Def block",
+    144: "Back pass",
+    145: "Corner situation",
+    146: "Direct free",
+    147: "Six Yard Blocked",
+    148: "Saved Off Line",
+    149: "Blocked X Coordinate",
+    150: "Blocked Y Coordinate",
+    152: "Not past goal line",
+    153: "Goal Mouth Y Coordinate",
+    154: "Goal Mouth Z Coordinate",
+    155: "Attacking Pass",
+    156: "Throw In",
+    157: "Yellow Card",
+    158: "Second yellow",
+    159: "Red Card",
+    160: "Deleted Event Type",
+    163: "Volley",
+    164: "Overhead",
+    165: "Half Volley",
+    166: "Diving Header",
+    167: "Scramble",
+    168: "Strong",
+    169: "Weak",
+    170: "Rising",
+    171: "Dipping",
+    172: "Lob",
+    173: "One Bounce",
+    174: "Few Bounces",
+    175: "Swerve Left",
+    176: "Swerve Right",
+    177: "Swerve Moving",
+    178: "Keeper Throw",
+    179: "Goal Kick",
+    180: "Punch",
+    181: "Direction of play",
+    182: "Intentional Assist",
+    183: "Team Formation",
+    184: "Team Player Formation",
+    185: "Formation slot",
+    186: "Dive",
+    187: "Deflection",
+    188: "Temperature",
+    189: "Conditions",
+    190: "Field Pitch",
+    191: "Lightings",
+    192: "Attendance figure",
+    193: "Official position",
+    194: "Official Id",
+    195: "Far Wide Left",
+    196: "Far Wide Right",
+    197: "Keeper Touched",
+    198: "Keeper Saved",
+    199: "Hit Woodwork",
+    200: "Own Player",
+    210: "Injured player id",
+    211: "Chipped",
+    212: "Lay-off",
+    213: "Launch",
+    214: "Persistent Infringement",
+    215: "Foul and Abusive Language",
+    216: "Throw In set piece",
+    217: "Encroachment",
+    218: "Leaving field",
+    219: "Entering field",
+    220: "Spitting",
+    221: "Professional foul",
+    222: "Handling on the line",
+    223: "Out of play",
+    224: "Flick-on",
+    225: "Leading to attempt",
+    226: "Leading to goal",
+    228: "Rescinded Card",
+    229: "No impact on timing",
+    230: "Parried safe",
+    231: "Parried danger",
+    232: "Fingertip",
+    233: "Caught",
+    234: "Collected",
+    235: "Standing",
+    236: "Diving",
+    237: "Stooping",
+    238: "Reaching",
+    239: "Hands",
+    240: "Feet",
+    241: "Dissent",
+    242: "Blocked cross",
+    243: "Scored",
+    244: "Saved",
+    245: "Missed",
+    246: "Player Not Visible",
+    247: "From shot off target",
+    248: "Off the ball foul",
+    249: "Block by hand",
+    250: "Captain",
+    251: "Pull Back",
+    252: "Switch of play",
+    253: "Team kit",
+    254: "GK hoof",
+    255: "Gk kick from hands",
+    256: "Big Chance",
+    257: "Individual Play",
+    258: "Assist",
+    259: "Overrun",
+    260: "Length",
+    261: "Angle",
+    262: "2nd related event ID",
+    263: "Referee stop",
+    264: "Referee delay",
+    265: "Weather problem",
+    266: "Crowd trouble",
+    267: "Fire",
+    268: "Object thrown on pitch",
+    269: "Spectator on pitch",
+    270: "Awaiting officials decision",
+    271: "Referee Injury",
+    272: "Game end",
+    273: "2nd assisted",
+    274: "2nd assist",
+    275: "Players on both posts",
+    276: "Player on near post",
+    277: "Player on far post",
+    278: "No players on posts",
+    279: "Inswinger",
+    280: "Outswinger",
+    281: "Straight",
+    282: "Suspended",
+    283: "Resume",
+    284: "Own shot blocked",
+    285: "Post match complete",
 }
 
-# ─── Sequence End Classification ──────────────────────────────────────────────
-SEQUENCE_END_TYPES = {
-    "Goal": "Goal",
-    "Miss": "Shot Off Target",
-    "Saved Shot": "Shot On Target",
-    "Foul": "Foul Won",
-    "Corner Awarded": "Corner Won",
-    "Out": "Out of Play",
-    "Offside Pass": "Offside",
-    "Dispossessed": "Dispossessed",
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# MACRO CATEGORY MAPPING — event type → (macro_category, categorias)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+EVENT_CATEGORY_MAP = {
+    "Pass":                     ("possession", "Posesión / circulación"),
+    "Offside Pass":             ("offside", "Fueras de juego"),
+    "Take On":                  ("dribble_duel", "Regates y duelos individuales"),
+    "Foul":                     ("foul_card", "Faltas y disciplina"),
+    "Out":                      ("stoppage_restart", "Interrupciones y reinicios de juego"),
+    "Corner Awarded":           ("stoppage_restart", "Interrupciones y reinicios de juego"),
+    "Tackle":                   ("defending", "Acciones defensivas (sin portero)"),
+    "Interception":             ("defending", "Acciones defensivas (sin portero)"),
+    "Save":                     ("goalkeeper", "Acciones específicas de portero"),
+    "Claim":                    ("goalkeeper", "Acciones específicas de portero"),
+    "Clearance":                ("defending", "Acciones defensivas (sin portero)"),
+    "Miss":                     ("shot", "Finalización (tiros y goles)"),
+    "Saved Shot":               ("shot", "Finalización (tiros y goles)"),
+    "Goal":                     ("shot", "Finalización (tiros y goles)"),
+    "Card":                     ("foul_card", "Faltas y disciplina"),
+    "Player Off":               ("match_admin", "Gestión de partido / cambios / organización"),
+    "Player on":                ("match_admin", "Gestión de partido / cambios / organización"),
+    "Start delay":              ("stoppage_restart", "Interrupciones y reinicios de juego"),
+    "End delay":                ("stoppage_restart", "Interrupciones y reinicios de juego"),
+    "End":                      ("match_admin", "Gestión de partido / cambios / organización"),
+    "Start":                    ("match_admin", "Gestión de partido / cambios / organización"),
+    "Team setp up":             ("match_admin", "Gestión de partido / cambios / organización"),
+    "Collection End":           ("feed_meta", "Metadatos técnicos del feed"),
+    "Formation change":         ("match_admin", "Gestión de partido / cambios / organización"),
+    "Punch":                    ("goalkeeper", "Acciones específicas de portero"),
+    "Deleted event":            ("feed_meta", "Metadatos técnicos del feed"),
+    "Aerial":                   ("dribble_duel", "Regates y duelos individuales"),
+    "Challenge":                ("dribble_duel", "Regates y duelos individuales"),
+    "Ball recovery":            ("defending", "Acciones defensivas (sin portero)"),
+    "Dispossessed":             ("dribble_duel", "Regates y duelos individuales"),
+    "Keeper pick-up":           ("goalkeeper", "Acciones específicas de portero"),
+    "Cross not claimed":        ("goalkeeper", "Acciones específicas de portero"),
+    "Offside provoked":         ("offside", "Fueras de juego"),
+    "Shield ball opp":          ("dribble_duel", "Regates y duelos individuales"),
+    "Foul throw-in":            ("foul_card", "Faltas y disciplina"),
+    "Ball touch":               ("possession", "Posesión / circulación"),
+    "Contentious referee decision": ("stoppage_restart", "Interrupciones y reinicios de juego"),
+    "Referee Drop Ball":        ("stoppage_restart", "Interrupciones y reinicios de juego"),
+    "Injury Time Announcement": ("match_admin", "Gestión de partido / cambios / organización"),
+    "Blocked Pass":             ("defending", "Acciones defensivas (sin portero)"),
+    "Error":                    ("possession", "Posesión / circulación"),
+    "Penalty faced":            ("goalkeeper", "Acciones específicas de portero"),
+    "Unknown":                  ("feed_meta", "Metadatos técnicos del feed"),
 }
 
-STOPPAGE_EVENTS = {
-    "Start", "End", "Start delay", "End delay", "Referee Drop Ball",
-    "Player Off", "Player on", "Team setp up", "Formation change",
-    "Injury Time Announcement", "Collection End", "Unknown",
-    "Deleted event", "Card", "Contentious referee decision",
-}
-
-def get_position_group(pos):
-    if pos is None or str(pos) == "nan":
-        return "Unknown"
-    for group, positions in POSITION_GROUPS.items():
-        if pos in positions:
-            return group
-    return "Unknown"
-
-
-# ─── Pitch Zone Definitions (Opta 100×100 coordinate system) ──────────────────
-# X: 0=own goal line, 100=opponent goal line
-# Y: 0=right touchline (from TV camera), 100=left touchline
-
-THIRDS_X = {
-    "defensive": (0, 33.3),
-    "middle": (33.3, 66.6),
-    "final": (66.6, 100),
-}
-
-LANES_Y = {
-    "left": (66.6, 100),       # left from attacking perspective
-    "left_hs": (55, 66.6),     # left half-space
-    "center": (36.8, 55),      # central corridor
-    "right_hs": (21.1, 36.8),  # right half-space
-    "right": (0, 21.1),        # right channel
-}
-
-# Wide lanes (3-lane split)
-LANES_Y_3 = {
-    "left": (66.6, 100),
-    "center": (33.3, 66.6),
-    "right": (0, 33.3),
-}
-
-# Box zones
-BOX_X = (83.0, 100.0)
-BOX_Y = (21.1, 78.9)
-
-ZONE_14_X = (72, 83)
-ZONE_14_Y = (30, 70)
-
-# ─── Event Type Constants ──────────────────────────────────────────────────────
-SHOT_EVENTS = ["Miss", "Goal", "Saved Shot"]
-DEFENSIVE_ACTIONS = ["Tackle", "Interception", "Foul", "Clearance"]
-PRESSING_ACTIONS = ["Tackle", "Interception", "Ball recovery"]
-
-# ─── Match Window Labels ──────────────────────────────────────────────────────
-MATCH_WINDOWS = {
-    "Last 3": 3,
-    "Last 5": 5,
-    "Last 10": 10,
-    "All Available": 999,
-}
-
-# ─── xG Model Features ────────────────────────────────────────────────────────
-XG_FEATURES = [
-    "distance_to_goal",
-    "angle_to_goal",
-    "is_header",
-    "is_right_foot",
-    "is_left_foot",
-    "is_penalty",
-    "is_direct_fk",
-    "is_from_corner",
-    "is_fast_break",
-    "is_big_chance",
-    "shot_x",
-    "shot_y",
-    "distance_sq",
-    "angle_sq",
-]
-
-# ─── Color Palette ─────────────────────────────────────────────────────────────
-COLORS = {
-    "primary": "#1B2A4A",
-    "secondary": "#2E86AB",
-    "accent": "#E8443A",
-    "success": "#2ECC71",
-    "warning": "#F39C12",
-    "light": "#ECF0F1",
-    "dark": "#2C3E50",
-    "pitch": "#2D8C3C",
-    "pitch_lines": "#FFFFFF",
-    "heatmap_low": "#313695",
-    "heatmap_mid": "#FFFFBF",
-    "heatmap_high": "#A50026",
-}
-
-# ─── Macro Category Mapping ───────────────────────────────────────────────────
-MACRO_CATEGORIES = {
-    "possession": "Possession",
-    "shot": "Shot",
-    "defending": "Defending",
-    "dribble_duel": "Duel",
-    "foul_card": "Foul/Card",
-    "goalkeeper": "Goalkeeper",
-    "stoppage_restart": "Set Piece / Restart",
-    "offside": "Offside",
-    "match_admin": "Admin",
-    "feed_meta": "Meta",
-}
+# Default for unmapped events
+DEFAULT_CATEGORY = ("feed_meta", "Metadatos técnicos del feed")
